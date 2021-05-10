@@ -34,7 +34,7 @@ extern "C" {
         return Size;
     }
 
-    __declspec(dllexport) int sendMessage(const char *url, const char *username, const char *message)
+    __declspec(dllexport) int sendMessage(const char *url, const char *username, const char *team, const char *message)
     {
         CURL* curl = curl_easy_init();
         if (curl)
@@ -64,12 +64,40 @@ extern "C" {
                 curl_free(encoded);
             }
 
-            oss << "&avatar_url=";
-            encoded = curl_easy_escape(curl, "", 0);
-            if (encoded)
-            {
-                oss << encoded;
-                curl_free(encoded);
+            string tm = team;
+
+            if (tm == "1") {
+                string image = "https://media.discordapp.net/attachments/734183379662012429/839263497825026068/desconocido.jpeg";
+
+                oss << "&avatar_url=";
+                encoded = curl_easy_escape(curl, image.c_str(), image.length());
+                if (encoded)
+                {
+                    oss << encoded;
+                    curl_free(encoded);
+                }
+            }
+            else if (tm == "red") {
+                string image = "https://cdn.discordapp.com/attachments/734183379662012429/839263507299958824/desconocido.jpeg";
+
+                oss << "&avatar_url=";
+                encoded = curl_easy_escape(curl, image.c_str(), image.length());
+                if (encoded)
+                {
+                    oss << encoded;
+                    curl_free(encoded);
+                }
+            }
+            else if (tm == "blue") {
+                string image = "https://cdn.discordapp.com/attachments/734183379662012429/839263435543019530/desconocido.jpeg";
+
+                oss << "&avatar_url=";
+                encoded = curl_easy_escape(curl, image.c_str(), image.length());
+                if (encoded)
+                {
+                    oss << encoded;
+                    curl_free(encoded);
+                }
             }
 
             string postdata = oss.str();
@@ -101,7 +129,7 @@ extern "C" {
             string objS = objetive;
             string reasonS = reason;
             string portS = port;
-            
+
             string str = R"({ "username": "Logger", "content": "", "embeds": [{ "author": { "name": "Use by: )" + adminS + R"(", "url": "", "icon_url": "" }, "title": "Command Usage", "fields": [{ "name": "Command", "value": ")" + cmdS + R"(", "inline": false }, { "name": "Objetive", "value": ")" + objS + R"(", "inline": false }, { "name": "Reason", "value": ")" + reasonS + R"(", "inline": false }, { "name": "Port", "value": ")" + portS + R"(", "inline": false } ] }] })";
 
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.c_str());
